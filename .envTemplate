@@ -1,0 +1,5 @@
+DB_PASSWORD = "YourPassword"
+DB_NAME = "YourDatabase"
+DB_HOST = "localhost"
+DB_PORT = 1234
+DB_USER = "YourUser"
