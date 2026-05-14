@@ -1,6 +1,6 @@
-import { UserOrmEntity } from "../entities/auth.entity";
+import { UserOrmEntity } from "../entities/user.orm.entity";
 
-export interface UserRepository { 
+export interface UserRepository {
     create(user: Partial<UserOrmEntity>): Promise<UserOrmEntity>;
     update(id: string, user: Partial<UserOrmEntity>): Promise<UserOrmEntity>;
     delete(id: string): Promise<void>;
