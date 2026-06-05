@@ -5,4 +5,5 @@ export interface UserRepository {
     update(id: string, user: Partial<UserOrmEntity>): Promise<UserOrmEntity>;
     delete(id: string): Promise<void>;
     findById(id: string): Promise<UserOrmEntity>;
+    findByEmail(email: string): Promise<UserOrmEntity | null>;
 }
