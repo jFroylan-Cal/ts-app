@@ -1,5 +1,5 @@
 import { SetMetadata, applyDecorators } from '@nestjs/common';
-import { ResponseOptions } from './interfaces/api-response.interface';
+import { ResponseOptions } from '../interfaces/api-response.interface';
 
 export const RESPONSE_METADATA = 'custom-response-metadata';
 
