@@ -3,26 +3,30 @@ import { ValidRoles } from '../enums/valid-role.enum';
 
 export class SignUpDto {
     @IsString()
-    name!: string;
+    readonly name!: string;
 
     @IsString()
-    lastName!: string;
+    readonly lastName!: string;
 
     @IsString()
-    sourName!: string;
+    readonly sourName!: string;
 
-    @IsString()
     @IsEmail()
-    email!: string;
+    readonly email!: string;
 
     @IsString()
-    phone!: string;
+    readonly phone!: string;
 
     @IsString()
     @MinLength(6)
-    secret!: string;
+    readonly secret!: string;
 
     @IsEnum(ValidRoles)
     @IsOptional()
-    role?: ValidRoles;
+    readonly role?: ValidRoles;
+
+    @IsString()
+    readonly createdAt!: string;
+
+    
 }

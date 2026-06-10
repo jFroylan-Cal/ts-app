@@ -12,6 +12,8 @@ import { UserRepositoryImpl } from './repository/user.repository.impl';
 import { UserOrmEntity } from './entities/user.orm.entity';
 import { JwtPayload } from './interfaces/jwt-payload';
 import { HashOptions } from './interfaces/hashing';
+import { formatDates } from 'src/common/functions/formatDates';
+import { UserResponse } from './interfaces/user-response';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +22,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signUp(signUpDto: SignUpDto): Promise<UserOrmEntity> {
+  async signUp(signUpDto: SignUpDto): Promise<{ token: string }> {
     const { email, secret } = signUpDto;
     const existingUser = await this.userRepository.findByEmail(email);
     if (existingUser) {
@@ -32,15 +34,19 @@ export class AuthService {
     const newUser = await this.userRepository.create({
       ...signUpDto,
       secret: hashedPassword,
+      createdAt: new Date(formatDates(signUpDto.createdAt)),
+      updatedAt: new Date(),
+      isActive: true,
     });
 
-    delete (newUser as any).secret;
-    return newUser;
+    return {
+      token: this._getJwtToken({ id: newUser.id, email: newUser.email }),
+    };
   }
 
   async login(
     loginDto: LoginDto,
-  ): Promise<{ user: UserOrmEntity; token: string }> {
+  ): Promise<{ user: UserResponse; token: string }> {
     const { email, secret } = loginDto;
     const user = await this.userRepository.findByEmail(email);
     if (!user) {
@@ -52,8 +58,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const userResponse = { ...user };
-    delete (userResponse as any).secret;
+    const userResponse = this._UserResponse(user);
 
     return {
       user: userResponse,
@@ -74,7 +79,10 @@ export class AuthService {
     if (updateAuthDto.secret) {
       updateAuthDto.secret = await argon2.hash(updateAuthDto.secret);
     }
-    const updatedUser = await this.userRepository.update(id, updateAuthDto);
+    const updatedUser = await this.userRepository.update(id, {
+      ...updateAuthDto,
+      updatedAt: new Date(formatDates(updateAuthDto.updatedAt)),
+    });
     delete (updatedUser as any).secret;
     return updatedUser;
   }
@@ -85,5 +93,16 @@ export class AuthService {
 
   private _getJwtToken(payload: JwtPayload): string {
     return this.jwtService.sign(payload);
+  }
+
+  private _UserResponse(user: UserOrmEntity):UserResponse {
+    const userResponse = {
+     id : user.id,
+     name : user.name,
+     lastname : user.lastName,
+     email : user.email,
+    };
+
+    return userResponse;
   }
 }

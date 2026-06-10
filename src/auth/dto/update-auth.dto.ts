@@ -1,4 +1,36 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { SignUpDto } from './signup.dto';
+import {
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
+import { ValidRoles } from '../enums/valid-role.enum';
 
-export class UpdateAuthDto extends PartialType(SignUpDto) {}
+export class UpdateAuthDto {
+  @IsString()
+  readonly name!: string;
+
+  @IsString()
+  readonly lastName!: string;
+
+  @IsString()
+  readonly sourName!: string;
+
+  @IsEmail()
+  readonly email!: string;
+
+  @IsString()
+  readonly phone!: string;
+
+  @IsString()
+  @MinLength(6)
+  secret!: string;
+
+  @IsEnum(ValidRoles)
+  @IsOptional()
+  readonly role?: ValidRoles;
+
+  @IsString()
+  readonly updatedAt!: string;
+}

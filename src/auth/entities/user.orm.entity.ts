@@ -3,7 +3,7 @@ import { ValidRoles } from "../enums/valid-role.enum";
 
 @Entity({ name: 'Users' })
 export class UserOrmEntity {
-    @PrimaryGeneratedColumn({ name: 'User_uuidId' })
+    @PrimaryGeneratedColumn('uuid', { name: 'User_uuidId'})
     id!: string;
 
     @Column({ name: 'User_strName' })
