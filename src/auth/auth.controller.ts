@@ -39,11 +39,13 @@ export class AuthController {
   }
 
   @Patch(':id')
+  @Auth(ValidRoles.admin)
   update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
     return this.authService.update(id, updateAuthDto);
   }
 
   @Delete(':id')
+  @Auth(ValidRoles.admin)
   remove(@Param('id') id: string) {
     return this.authService.remove(id);
   }

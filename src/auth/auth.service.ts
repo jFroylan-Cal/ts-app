@@ -31,12 +31,15 @@ export class AuthService {
 
     const hashedPassword = await argon2.hash(secret, HashOptions);
 
+    const { role, ...signUpData } = signUpDto;
+
     const newUser = await this.userRepository.create({
-      ...signUpDto,
+      ...signUpData,
       secret: hashedPassword,
       createdAt: new Date(formatDates(signUpDto.createdAt)),
       updatedAt: new Date(),
       isActive: true,
+      ...(role ? { role: [role] } : {}),
     });
 
     return {
@@ -79,9 +82,11 @@ export class AuthService {
     if (updateAuthDto.secret) {
       updateAuthDto.secret = await argon2.hash(updateAuthDto.secret);
     }
+    const { role, ...updateAuthData } = updateAuthDto;
     const updatedUser = await this.userRepository.update(id, {
-      ...updateAuthDto,
+      ...updateAuthData,
       updatedAt: new Date(formatDates(updateAuthDto.updatedAt)),
+      ...(role ? { role: [role] } : {}),
     });
     delete (updatedUser as any).secret;
     return updatedUser;

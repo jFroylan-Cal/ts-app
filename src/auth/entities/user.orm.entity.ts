@@ -34,10 +34,10 @@ export class UserOrmEntity {
   isActive!: boolean;
 
   @Column({
-    name: 'User_enumRole',
-    type: 'enum',
-    enum: ValidRoles,
-    default: ValidRoles.viewer,
+    name: 'User_arrRoles',
+    type: 'text',
+    array: true,
+    default: ['viewer']
   })
-  role!: ValidRoles;
+  role!: string[];
 }
