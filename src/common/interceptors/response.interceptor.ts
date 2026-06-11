@@ -25,7 +25,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<
   ): Observable<ApiResponse<T>> {
     const httpContext = context.switchToHttp();
     const response = httpContext.getResponse<Response>();
-    
+
     const metadata =
       this.reflector.get(RESPONSE_METADATA, context.getHandler()) || {};
 

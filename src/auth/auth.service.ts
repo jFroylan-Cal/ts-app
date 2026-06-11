@@ -95,12 +95,12 @@ export class AuthService {
     return this.jwtService.sign(payload);
   }
 
-  private _UserResponse(user: UserOrmEntity):UserResponse {
+  private _UserResponse(user: UserOrmEntity): UserResponse {
     const userResponse = {
-     id : user.id,
-     name : user.name,
-     lastname : user.lastName,
-     email : user.email,
+      id: user.id,
+      name: user.name,
+      lastname: user.lastName,
+      email: user.email,
     };
 
     return userResponse;

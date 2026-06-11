@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
@@ -24,8 +33,8 @@ export class AuthController {
   }
 
   @Get(':id')
-  @Auth(ValidRoles.admin,ValidRoles.supervisor, ValidRoles.manager, ValidRoles.collaborator)
-  findOne(@Param('id') id: string ) {
+  @Auth(ValidRoles.admin)
+  findOne(@Param('id') id: string) {
     return this.authService.findOne(id);
   }
 
