@@ -19,10 +19,10 @@ import { UserResponse } from './interfaces/user-response';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
   constructor(
     private readonly userRepository: UserRepositoryImpl,
     private readonly jwtService: JwtService,
-    private readonly logger = new Logger(AuthService.name),
   ) {}
 
   async signUp(signUpDto: SignUpDto): Promise<{ token: string }> {

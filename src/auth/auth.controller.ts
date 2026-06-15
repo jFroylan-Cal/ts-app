@@ -1,19 +1,18 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  UseGuards,
+  Get,
+  Param,
+  Patch,
+  Post,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { SignUpDto } from './dto/signup.dto';
-import { LoginDto } from './dto/login.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
 import { PostResponse } from 'src/common/decorators/api-response.decorator';
+import { AuthService } from './auth.service';
 import { Auth } from './decorators/auth.decorator';
+import { LoginDto } from './dto/login.dto';
+import { SignUpDto } from './dto/signup.dto';
+import { UpdateAuthDto } from './dto/update-auth.dto';
 import { ValidRoles } from './enums/valid-role.enum';
 
 @Controller('auth')
