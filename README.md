@@ -13,6 +13,7 @@
 ## 🛠️ Tech Stack
 
 *   **Backend:** Node.js, NestJS (TypeScript)
+*   **Package Manager:** pnpm (Fast, disk-efficient, and strict)
 *   **Database:** PostgreSQL + TypeORM
 *   **Scheduling:** @nestjs/schedule (Cron Jobs)
 *   **Documentation:** Swagger / OpenAPI
@@ -29,13 +30,17 @@
 
 ### Installation
 ```bash
-$ npm install
+# 1. Install dependencies
+$ pnpm install
+
+# 2. If prompted for ignored build scripts, run:
+$ pnpm rebuild @nestjs/core argon2
 
 # Development mode
-$ npm run start
+$ pnpm run start
 
 # Watch mode (Recommended for development)
-$ npm run start:dev
+$ pnpm run start:dev
 
 # Production mode
-$ npm run start:prod
+$ pnpm run start:prod
