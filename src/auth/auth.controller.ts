@@ -1,20 +1,8 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-} from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { SignUpDto } from './dto/signup.dto';
-import { LoginDto } from './dto/login.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { Body, Controller, Post } from '@nestjs/common';
 import { PostResponse } from 'src/common/decorators/api-response.decorator';
-import { Auth } from './decorators/auth.decorator';
-import { ValidRoles } from './enums/valid-role.enum';
+import { AuthService } from './auth.service';
+import { LoginDto } from './dto/login.dto';
+import { SignUpDto } from './dto/signup.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -30,23 +18,5 @@ export class AuthController {
   @PostResponse('User Logged In Successfully')
   login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
-  }
-
-  @Get(':id')
-  @Auth(ValidRoles.admin)
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(id);
-  }
-
-  @Patch(':id')
-  @Auth(ValidRoles.admin)
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(id, updateAuthDto);
-  }
-
-  @Delete(':id')
-  @Auth(ValidRoles.admin)
-  remove(@Param('id') id: string) {
-    return this.authService.remove(id);
   }
 }
