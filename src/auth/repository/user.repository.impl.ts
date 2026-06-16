@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, ILike, Repository } from 'typeorm';
 import { UserOrmEntity } from '../entities/user.orm.entity';
 import { UserRepository } from './user.repository';
 
@@ -83,8 +83,33 @@ export class UserRepositoryImpl implements UserRepository {
     return user;
   }
 
-  async findByEmail(email: string) {
-    const user = await this.ormRepository.findOneBy({ email });
+  async findByEmail(email: string): Promise<UserOrmEntity | null> {
+    const user = await this.ormRepository.findOne({
+      where: { email },
+      select: {
+        id: true,
+        email: true,
+        secret: true,
+        name: true,
+        lastName: true,
+      },
+    });
     return user;
+  }
+
+  async findByTerm(term: string) {
+    const user = await this.ormRepository.find({
+      where: [
+        { name: ILike(`%${term}%`) },
+        { lastName: ILike(`%${term}%`) },
+        { email: ILike(`%${term}%`) },
+      ],
+    });
+    return user;
+  }
+
+  async findAll(): Promise<UserOrmEntity[]> {
+    const users = await this.ormRepository.find();
+    return users;
   }
 }

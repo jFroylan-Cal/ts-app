@@ -1,21 +1,19 @@
 import {
-  Injectable,
   BadRequestException,
-  UnauthorizedException,
+  Injectable,
   Logger,
-  NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
-import { SignUpDto } from './dto/signup.dto';
-import { LoginDto } from './dto/login.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
-import { UserRepositoryImpl } from './repository/user.repository.impl';
-import { UserOrmEntity } from './entities/user.orm.entity';
-import { JwtPayload } from './interfaces/jwt-payload';
-import { HashOptions } from './interfaces/hashing';
 import { formatDates } from 'src/common/functions/formatDates';
+import { LoginDto } from './dto/login.dto';
+import { SignUpDto } from './dto/signup.dto';
+import { UserOrmEntity } from './entities/user.orm.entity';
+import { HashOptions } from './interfaces/hashing';
+import { JwtPayload } from './interfaces/jwt-payload';
 import { UserResponse } from './interfaces/user-response';
+import { UserRepositoryImpl } from './repository/user.repository.impl';
 
 @Injectable()
 export class AuthService {
@@ -39,6 +37,7 @@ export class AuthService {
     const entityData: Partial<UserOrmEntity> = {
       ...signUpData,
       secret: hashedPassword,
+      email: email.toLowerCase(),
       createdAt: new Date(formatDates(signUpDto.createdAt)),
       updatedAt: new Date(),
       isActive: true,
@@ -46,7 +45,7 @@ export class AuthService {
     };
     const newUser = await this.userRepository.create(entityData);
     this.logger.log('User created successfully');
-    
+
     return {
       token: this._getJwtToken({ id: newUser.id, email: newUser.email }),
     };
@@ -74,44 +73,6 @@ export class AuthService {
       user: userResponse,
       token: this._getJwtToken({ id: user.id, email: user.email }),
     };
-  }
-
-  async findOne(id: string): Promise<UserOrmEntity> {
-    const user = await this.userRepository.findById(id);
-    if (!user) {
-      this.logger.error('User not found');
-      throw new NotFoundException('User not found');
-    }
-    delete (user as any).secret;
-    return user;
-  }
-
-  async update(
-    id: string,
-    updateAuthDto: UpdateAuthDto,
-  ): Promise<UserOrmEntity> {
-    if (updateAuthDto.secret) {
-      updateAuthDto.secret = await argon2.hash(updateAuthDto.secret);
-    }
-    const { role, ...updateAuthData } = updateAuthDto;
-    const updatedUser = await this.userRepository.update(id, {
-      ...updateAuthData,
-      updatedAt: new Date(formatDates(updateAuthDto.updatedAt)),
-      ...(role ? { roles: [role] } : {}),
-    });
-    if (!updatedUser) {
-      this.logger.warn(`Update rejected: User does not exist`);
-      throw new NotFoundException(`User not found`);
-    }
-    this.logger.log(`User with ID updated successfully`);
-    const userResponse = { ...updatedUser };
-    delete (userResponse as any).secret;
-    return userResponse;
-  }
-
-  async remove(id: string): Promise<void> {
-    await this.userRepository.delete(id);
-    this.logger.log('User deleted successfully');
   }
 
   private _getJwtToken(payload: JwtPayload): string {

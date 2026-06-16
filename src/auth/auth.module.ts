@@ -9,6 +9,8 @@ import { UserOrmEntity } from './entities/user.orm.entity';
 import { UserRepositoryImpl } from './repository/user.repository.impl';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { UserRoleGuard } from './guards/user-role.guard';
+import { UserController } from './user.controller';
+import { UserService } from './user.service';
 
 @Module({
   imports: [
@@ -25,8 +27,14 @@ import { UserRoleGuard } from './guards/user-role.guard';
       }),
     }),
   ],
-  controllers: [AuthController],
-  providers: [AuthService, UserRepositoryImpl, JwtStrategy, UserRoleGuard],
+  controllers: [AuthController, UserController],
+  providers: [
+    AuthService,
+    UserRepositoryImpl,
+    JwtStrategy,
+    UserRoleGuard,
+    UserService,
+  ],
   exports: [
     UserRepositoryImpl,
     TypeOrmModule,

@@ -21,7 +21,7 @@ export class UserOrmEntity {
   @Column({ name: 'User_strPhone' })
   phone!: string;
 
-  @Column({ name: 'User_strSecret' })
+  @Column({ name: 'User_strSecret', select: false })
   secret!: string;
 
   @Column({ name: 'User_dteCreated' })
@@ -37,7 +37,7 @@ export class UserOrmEntity {
     name: 'User_arrRoles',
     type: 'text',
     array: true,
-    default: ['viewer']
+    default: ['viewer'],
   })
   role!: string[];
 }

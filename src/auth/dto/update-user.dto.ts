@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 import { ValidRoles } from '../enums/valid-role.enum';
 
-export class UpdateAuthDto {
+export class UpdateUserDto {
   @IsString()
   readonly name!: string;
 
